@@ -6,10 +6,10 @@
     </button>
     <file-vue v-if="structure.type === 'file'" :title="structure.name" :currentPath="currentPath + structure.name"/>
     <link-vue v-if="structure.type === 'link'" :title="structure.name" :currentPath="currentPath + structure.name" :targetLink="structure.target"/>
-    <ul v-if="structure.type === 'directory'" v-show="openDirectory" :style="{marginLeft: marginLeft + 'px'}">
+    <ul v-if="show" :style="{marginLeft: marginLeft + 'px'}">
         <directory-vue
-            v-for="(item, index) in structure.contents"
-            :key="item + index"
+            v-for="(item) in structure.contents"
+            :key="item.name"
             :structure="item"
             :marginLeft="marginLeft + 20"
             :currentPath="currentPath + structure.name + '/'"
@@ -48,11 +48,8 @@
       }
     },
     computed: {
-      haveContent: function () {
-        if (typeof (this.structure.contents) === "object") {
-          return true;
-        }
-          return false;
+      show () {
+        return this.structure.type === "directory" && this.openDirectory;
       }
     }
   }
@@ -100,6 +97,10 @@
   }
 
   .folderButton:hover .path{
+    display: block;
+  }
+
+  .folderButton:focus .path{
     display: block;
   }
 

@@ -23,55 +23,54 @@ export default {
     }
   },
   methods: {
+    thisLastElement (el, parent) {
+      let lastChild = parent.lastElementChild;
+      return (el === lastChild);
+    },
     getNextEl (currentTabEl) {
-      let nextTabEl = currentTabEl.nextElementSibling;
-      if (!nextTabEl) {
-        nextTabEl = currentTabEl.parentElement;
-        if (nextTabEl.tagName === "LI") {
-          nextTabEl = nextTabEl.nextElementSibling;
+        let nextTabEl =currentTabEl;
+        let lastChild = currentTabEl.parentElement.lastElementChild;
+
+        while (nextTabEl === lastChild) {
+          nextTabEl = nextTabEl.parentElement;
+          lastChild = nextTabEl.parentElement.lastElementChild;
+          if (nextTabEl.tagName === "DIV") {
+            return currentTabEl;
+          }
         }
-        if (!nextTabEl) {
-          nextTabEl = currentTabEl.parentElement.parentElement.parentElement.nextElementSibling;
-        }
-        if (!nextTabEl) {
+
+      nextTabEl = nextTabEl.nextElementSibling;
+
+        if (nextTabEl.tagName === "LI" || nextTabEl.tagName === "UL") {
+          while (nextTabEl.tagName === "LI" || nextTabEl.tagName === "UL") {
+            nextTabEl = (nextTabEl.firstElementChild) ? nextTabEl.firstElementChild : currentTabEl;
+          }
           return nextTabEl;
         }
-      }
-      if (nextTabEl.tagName === "UL") {
-        if (!(nextTabEl.style.display === "none")) {
-          nextTabEl = nextTabEl.firstElementChild;
-        } else {
-          nextTabEl = nextTabEl.parentElement.nextElementSibling;
-        }
-      }
-      if(!nextTabEl) {
         return nextTabEl;
-      }
-      if (nextTabEl.tagName === "LI") {
-        nextTabEl = nextTabEl.firstElementChild;
-      }
-      return nextTabEl;
     },
     getPreviousEl (currentTabEl) {
-      let previousTabEl = currentTabEl.parentElement.previousElementSibling;
-      if (!previousTabEl) {
-        previousTabEl = currentTabEl.parentElement.parentElement.previousElementSibling;
-      }
-      if (previousTabEl.tagName === "H1") {
-        return currentTabEl;
-      }
-      if (previousTabEl.tagName === "LI") {
-        previousTabEl = previousTabEl.lastElementChild;
-      }
-      if (previousTabEl.tagName === "UL") {
-        if (!(previousTabEl.style.display === "none")) {
-          previousTabEl = previousTabEl.lastElementChild.lastElementChild;
+      let previousTabEl =currentTabEl;
+      let firstChild = currentTabEl.parentElement.firstElementChild;
+
+      while (previousTabEl === firstChild) {
+        previousTabEl = previousTabEl.parentElement;
+        firstChild = previousTabEl.parentElement.firstElementChild;
+        if (previousTabEl.tagName === "DIV") {
+          return currentTabEl;
         }
-        else {
-          previousTabEl = previousTabEl.previousElementSibling;
+      }
+
+      previousTabEl = previousTabEl.previousElementSibling;
+
+      if (previousTabEl.tagName === "LI" || previousTabEl.tagName === "UL") {
+        while (previousTabEl.tagName === "LI" || previousTabEl.tagName === "UL") {
+          previousTabEl = (previousTabEl.lastElementChild) ? previousTabEl.lastElementChild : currentTabEl;
         }
+        return previousTabEl;
       }
       return previousTabEl;
+
     },
     changeFocus (e) {
       if (e.key === "ArrowDown" || e.key === "ArrowUp") {
