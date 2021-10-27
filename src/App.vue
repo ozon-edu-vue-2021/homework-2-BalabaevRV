@@ -23,10 +23,6 @@ export default {
     }
   },
   methods: {
-    thisLastElement (el, parent) {
-      let lastChild = parent.lastElementChild;
-      return (el === lastChild);
-    },
     getNextEl (currentTabEl) {
         let nextTabEl =currentTabEl;
         let lastChild = currentTabEl.parentElement.lastElementChild;
@@ -43,7 +39,7 @@ export default {
 
         if (nextTabEl.tagName === "LI" || nextTabEl.tagName === "UL") {
           while (nextTabEl.tagName === "LI" || nextTabEl.tagName === "UL") {
-            nextTabEl = (nextTabEl.firstElementChild) ? nextTabEl.firstElementChild : currentTabEl;
+            nextTabEl = (nextTabEl.firstElementChild) ? nextTabEl.firstElementChild : this.getNextEl(nextTabEl);
           }
           return nextTabEl;
         }
@@ -65,7 +61,7 @@ export default {
 
       if (previousTabEl.tagName === "LI" || previousTabEl.tagName === "UL") {
         while (previousTabEl.tagName === "LI" || previousTabEl.tagName === "UL") {
-          previousTabEl = (previousTabEl.lastElementChild) ? previousTabEl.lastElementChild : currentTabEl;
+          previousTabEl = (previousTabEl.lastElementChild) ? previousTabEl.lastElementChild : this.getPreviousEl(previousTabEl);
         }
         return previousTabEl;
       }
